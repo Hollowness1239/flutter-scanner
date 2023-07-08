@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -63,30 +64,37 @@ class ChatMessage extends StatelessWidget {
           children: [
             Container(
               margin: const EdgeInsets.only(right: 16.0),
-              child: CircleAvatar(
-                backgroundColor: color,
-                child: Text(
-                  txtLFBY[0],
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(txtLFBY, style: const TextStyle(fontSize: 20)),
-                Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(
-                    text!,
-                    style: textTheme.bodyText2?.copyWith(
-                      color: Colors.black54,
-                      height: 1.5,
-                      fontSize: 16,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: color,
+                    child: Text(
+                      txtLFBY[0],
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(txtLFBY, style: const TextStyle(fontSize: 20)),
+                  Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: Text(
+                      text!,
+                      style: textTheme.bodyText2?.copyWith(
+                        color: Colors.black54,
+                        height: 1.5,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -95,81 +103,7 @@ class ChatMessage extends StatelessWidget {
   }
 }
 
-// class ChatMessage extends StatefulWidget {
-//   const ChatMessage({
-//     required this.text,
-//     required this.animationController,
-//     required this.txtLFBY,
-//     required this.color,
-//     Key? key,
-//   }) : super(key: key);
-//   final String? text;
-//   final AnimationController animationController;
-//   final String txtLFBY;
-//   final Color color;
 
-//   @override
-//   _ChatMessageState createState() => _ChatMessageState();
-// }
-
-// class _ChatMessageState extends State<ChatMessage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     final textTheme = Theme.of(context).textTheme;
-
-//     return SizeTransition(
-//       sizeFactor: CurvedAnimation(
-//           parent: widget.animationController, curve: Curves.ease),
-//       axisAlignment: 0.0,
-//       child: Container(
-//         margin: const EdgeInsets.symmetric(vertical: 10.0),
-//         child: Row(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             // Container(
-//             //   margin: const EdgeInsets.only(right: 16.0),
-//             //   child: CircleAvatar(
-//             //     backgroundColor: widget.color,
-//             //     child: Text(
-//             //       widget.txtLFBY[0],
-//             //       style: const TextStyle(color: Colors.white),
-//             //     ),
-//             //   ),
-//             // ),
-//             ListTile(
-//               title: Text(widget.txtLFBY, style: const TextStyle(fontSize: 20)),
-//               subtitle: Text(
-//                 widget.text!,
-//                 style: textTheme.bodyText2?.copyWith(
-//                   color: Colors.black54,
-//                   height: 1.5,
-//                   fontSize: 16,
-//                 ),
-//               ),
-//             ),
-//             // Column(
-//             //   crossAxisAlignment: CrossAxisAlignment.start,
-//             //   children: [
-//             //     Text(widget.txtLFBY, style: const TextStyle(fontSize: 20)),
-//             //     Container(
-//             //       margin: const EdgeInsets.only(top: 5.0),
-//             //       child: Text(
-//             //         widget.text!,
-//             //         style: textTheme.bodyText2?.copyWith(
-//             //           color: Colors.black54,
-//             //           height: 1.5,
-//             //           fontSize: 16,
-//             //         ),
-//             //       ),
-//             //     ),
-//             //   ],
-//             // ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -269,8 +203,16 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // checkYoutubeURL = true;
 
     return Scaffold(
+      backgroundColor: Colors.white70,
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.indigoAccent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -279,27 +221,33 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(8.0),
               reverse: false,
               itemBuilder: (_, index) {
-                return Column(
-                  children: [
-                    ListTile(
-                      title: _messages[index],
-                      onTap: () async  {
-                        if (_messages[index].txtLFBY == "Data") {
-                          var snackBar = SnackBar(
-                            content: Text('Barcode: ${_messages[index].text}'),
-                            action: SnackBarAction(
-                              label: 'Undo',
-                              onPressed: () {},
-                            ),
-                          );
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        } else {
-                          await launch(_messages[index].text.toString());
-                        }
-                      },
-                    ),
-                    const Divider(),
-                  ],
+                return Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: _messages[index],
+                        onTap: () async {
+                          if (_messages[index].txtLFBY == txtData) {
+                            var snackBar = SnackBar(
+                              content:
+                                  Text('Barcode: ${_messages[index].text}'),
+                              action: SnackBarAction(
+                                label: 'Undo',
+                                onPressed: () {},
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {
+                            await launch(_messages[index].text.toString());
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 );
                 // return GestureDetector(
                 //   child: _messages[index],
@@ -409,6 +357,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         onPressed: startScan,
         tooltip: 'Scan',
         child: const Icon(Icons.qr_code_scanner),
+        backgroundColor: Colors.indigoAccent,
       ),
     );
   }
